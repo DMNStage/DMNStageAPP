@@ -1,0 +1,40 @@
+<!--
+  Generated template for the SubproductPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{selectedSubProduct?.name}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-item>
+    <ion-label>Date</ion-label>
+    <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="myDate" (ionChange)="onDateChange(myDate)"></ion-datetime>
+  </ion-item>
+  <ion-item *ngIf="isTimeValuesFilled">
+    <ion-label>Heure</ion-label>
+    <ion-datetime displayFormat="HH:mm" [(ngModel)]="myTime" hourValues="{{hoursValues.toString()}}"
+                  minuteValues="{{minutesValues.toString()}}" (ionChange)="onTimeChange(myTime)"></ion-datetime>
+  </ion-item>
+
+  <ion-slides>
+    <ion-slide>
+      <!--kayn mochkil fla taille lajarbti ftel-->
+      <ion-img width="1024" height="768"
+               src="http://img.dmnstage.com/teledetection/satellitestandard/canalir/20180731/0030.jpg"></ion-img>
+    </ion-slide>
+    <ion-slide>
+      <h1>Slide 2</h1>
+    </ion-slide>
+    <ion-slide>
+      <h1>Slide 3</h1>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
