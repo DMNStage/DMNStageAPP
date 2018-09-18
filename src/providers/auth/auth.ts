@@ -45,7 +45,7 @@ export class AuthProvider {
     console.log('Checking Token ...');
     const expirationDate = new Date(data.expiration);
     const now = new Date();
-    now.setMinutes(now.getMinutes() + 0); // now + 2 minutes
+    now.setMinutes(now.getMinutes() + 1); // now + 2 minutes
     console.log(expirationDate);
     console.log(now);
     return new Promise((resolve, reject) => {

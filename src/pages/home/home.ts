@@ -32,9 +32,4 @@ export class HomePage {
       console.log('none');
     });
   }
-
-  logout() {
-
-
-  }
 }

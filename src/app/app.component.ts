@@ -58,7 +58,9 @@ export class MyApp {
 
   }
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
+    console.log("aaaaaa");
+    console.log(this.isInitialized);
     if (!this.isInitialized)
       this.initializeApp();
   }
