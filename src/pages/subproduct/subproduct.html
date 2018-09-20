@@ -19,9 +19,9 @@
     <ion-card-content>
       <ion-item *ngIf="!fullscreen">
         <ion-label>Date</ion-label>
-        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="myDate" (ionChange)="onDateChange()"></ion-datetime>
+        <ion-datetime displayFormat="DD/MM/YYYY" [max]="myDate" [(ngModel)]="myDate"
+                      (ionChange)="onDateChange()"></ion-datetime>
       </ion-item>
-
 
       <!-- <ion-item *ngIf="isTimeValuesFilled">
          <ion-label>Heure</ion-label>

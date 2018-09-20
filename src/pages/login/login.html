@@ -19,63 +19,101 @@
 
 <!--<p>{{loginResult}}</p>-->
 <!--</ion-content>-->
+<!--
 
 <ion-content>
   <ion-grid no-padding>
-    <!-- logo -->
+    &lt;!&ndash; logo &ndash;&gt;
     <ion-row header align-items-start align-items-stretch>
       <ion-col col-10 offset-1 col-md-6 offset-md-3>
         <img logo src=""/>
       </ion-col>
 
-      <!-- Section form>-->
+      &lt;!&ndash; Section form>&ndash;&gt;
       <ion-col col-10 offset-1 col-md-6 offset-md-3>
         <form padding>
-          <ion-row align-items-start>
+          <ion-row align-items-center>
             <ion-col col-12>
-              <h1><strong>Title</strong> Sub</h1>
-              <!--<h1><strong>{{data.title}}</strong> {{data.subtitle}}</h1>-->
+              <h1>Maroc Météo</h1>
+              &lt;!&ndash;<h1><strong>{{data.title}}</strong> {{data.subtitle}}</h1>&ndash;&gt;
             </ion-col>
           </ion-row>
-          <!-- Input-field -->
+          &lt;!&ndash; Input-field &ndash;&gt;
           <ion-row>
             <ion-col col-12>
               <div input-field>
-                <!-- Input-field-text -->
+                &lt;!&ndash; Input-field-text &ndash;&gt;
                 <ion-item no-padding>
                   <ion-input type="text" placeholder="Username" [(ngModel)]="username"
                              [ngModelOptions]="{standalone: true}"></ion-input>
-                  <!--               <ion-label no-margin *ngIf="!isUsernameValid">{{data.errorUser}}</ion-label>
-                   -->            </ion-item>
-                <!-- Input-field-password -->
+                  &lt;!&ndash;               <ion-label no-margin *ngIf="!isUsernameValid">{{data.errorUser}}</ion-label>
+                   &ndash;&gt;            </ion-item>
+                &lt;!&ndash; Input-field-password &ndash;&gt;
                 <ion-item no-padding>
                   <ion-input type="password" placeholder="Password" [(ngModel)]="password"
                              [ngModelOptions]="{standalone: true}"></ion-input>
-                  <!-- <ion-label no-margin *ngIf="!isPasswordValid">{{data.errorPassword}}</ion-label> -->
+                  &lt;!&ndash; <ion-label no-margin *ngIf="!isPasswordValid">{{data.errorPassword}}</ion-label> &ndash;&gt;
                 </ion-item>
               </div>
-              <!-- Login button -->
-              <ion-col col-12 no-padding>
+              &lt;!&ndash; Login button &ndash;&gt;
+              <ion-col col-12>
                 <button no-margin ion-button full text-uppercase (click)="onLogin(username, password)">Se connecter
                 </button>
               </ion-col>
-              <!-- Description -->
-              <!--<div description text-center>-->
-              <!--<ion-row>-->
-              <!--&lt;!&ndash; Reset your password button &ndash;&gt;-->
-              <!--<ion-col col-12 no-padding no-margin>-->
-              <!--<p no-margin no-padding>{{data.txtForgotPassword}} <a>{{data.btnResetYourPassword}}</a> </p>-->
-              <!--</ion-col>-->
-              <!--&lt;!&ndash; Signup now button &ndash;&gt;-->
-              <!--<ion-col col-12padding>-->
-              <!--<p no-margin no-padding>{{data.txtSignupnow}} <a>{{data.btnSignupnow}}</a> </p>-->
-              <!--</ion-col>-->
-              <!--</ion-row>-->
-              <!--</div>-->
+              &lt;!&ndash; Description &ndash;&gt;
+              &lt;!&ndash;<div description text-center>&ndash;&gt;
+              &lt;!&ndash;<ion-row>&ndash;&gt;
+              &lt;!&ndash;&lt;!&ndash; Reset your password button &ndash;&gt;&ndash;&gt;
+              &lt;!&ndash;<ion-col col-12 no-padding no-margin>&ndash;&gt;
+              &lt;!&ndash;<p no-margin no-padding>{{data.txtForgotPassword}} <a>{{data.btnResetYourPassword}}</a> </p>&ndash;&gt;
+              &lt;!&ndash;</ion-col>&ndash;&gt;
+              &lt;!&ndash;&lt;!&ndash; Signup now button &ndash;&gt;&ndash;&gt;
+              &lt;!&ndash;<ion-col col-12padding>&ndash;&gt;
+              &lt;!&ndash;<p no-margin no-padding>{{data.txtSignupnow}} <a>{{data.btnSignupnow}}</a> </p>&ndash;&gt;
+              &lt;!&ndash;</ion-col>&ndash;&gt;
+              &lt;!&ndash;</ion-row>&ndash;&gt;
+              &lt;!&ndash;</div>&ndash;&gt;
             </ion-col>
           </ion-row>
         </form>
       </ion-col>
     </ion-row>
   </ion-grid>
+</ion-content>
+-->
+<!--<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Login
+    </ion-title>
+  </ion-navbar>
+</ion-header>-->
+<ion-content padding text-center class="center Background">
+  <ion-col col-10 col-md-6>
+    <img logo src="assets/imgs/DMNlogo.jpg"/>
+  </ion-col>
+  <form #loginForm="ngForm" (ngSubmit)="onLogin()" autocomplete="off">
+    <ion-row>
+      <ion-col>
+        <ion-list inset>
+          <ion-item>
+            <ion-input placeholder="Nom d'utilisateur" name="username" id="loginField"
+                       type="text" required [(ngModel)]="username" #email></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input placeholder="Mot de passe" name="password" id="passwordField"
+                       type="password" required [(ngModel)]="password"></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+        <button ion-button class="submit-btn" full type="submit"
+                [disabled]="!loginForm.form.valid">Login
+        </button>
+      </ion-col>
+    </ion-row>
+  </form>
 </ion-content>

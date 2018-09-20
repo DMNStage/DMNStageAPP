@@ -1,8 +1,9 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {App, Events, IonicPage, LoadingController, MenuController, NavController, NavParams} from 'ionic-angular';
 import {AuthProvider} from "../../providers/auth/auth";
 import {HomePage} from "../home/home";
 import {ProductProvider} from "../../providers/product/product";
+import {HttpErrorResponse} from "@angular/common/http";
 
 /**
  * Generated class for the LoginPage page.
@@ -19,19 +20,25 @@ import {ProductProvider} from "../../providers/product/product";
 export class LoginPage {
 
   loginResult: any;
-  private loading = this.loadingCtrl.create({
-    spinner: 'bubbles',
-    content: 'Veuillez Patienter ...'
-  });
+  @ViewChild('email') email: any;
+
+  private username: string;
+  private password: string;
+  private error: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private authProvider: AuthProvider,
               private app: App, private menu: MenuController, private loadingCtrl: LoadingController,
               private productProvider: ProductProvider, public events: Events) {
   }
 
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
+    setTimeout(() => {
+      this.email.setFocus();
+    }, 500);
   }
+
 
   ionViewDidEnter() {
     this.menu.swipeEnable(false);
@@ -41,48 +48,42 @@ export class LoginPage {
     this.menu.swipeEnable(true);
   }
 
-  onLogin(username, password) {
-    this.loading.present();
-    this.authProvider.authenticateUser(username, password).subscribe(tokenData => {
+  onLogin() {
+    let loading = this.loadingCtrl.create({
+      spinner: 'bubbles',
+      content: 'Veuillez Patienter ...'
+    });
+    loading.present();
+    this.authProvider.authenticateUser(this.username, this.password).subscribe(tokenData => {
         this.loginResult = tokenData;
         this.authProvider.storeTokenData(tokenData);
 
         this.events.publish('loggedIn', tokenData);
-        /*this.productProvider.getProductsByClient(tokenData.username).toPromise().then((productData: Array<Product>) => {
-          console.log(productData);
-          this.productProvider.products = productData;
-          productData.forEach(product => {
-            this.pages.push({title: product.name, id: product.id});
-          });
-          this.isInitialized = true;
 
-        }, () => {
-
-          const alert = this.alertCtrl.create({
-            title: 'Erreur!',
-            subTitle: 'Erreur lors de la récupération de vos produits!',
-            buttons: [{
-              text: 'Réessayer',
-              handler: () => {
-                this.initializeApp();
-              }
-            }]
-          });
-          alert.present();
-
-        });*/
 
         this.app.getActiveNav().setRoot(HomePage);
         try {
-          this.loading.dismiss();
+          loading.dismiss();
         } catch (e) {
 
         }
       },
-      err => {
-        this.loginResult = err;
+      (err: HttpErrorResponse) => {
+
+        console.log(err);
+        if (err.status === 400) {
+          console.log(err.error.error_description);
+          if (err.error.error_description.toLowerCase().search('bad credentials') !== -1) {
+            this.error = 'Nom d\'utilisateur ou mot de passe incorrect';
+          } else if (err.error.error_description.toLowerCase().search('user is disabled') !== -1) {
+            this.error = 'Votre compte est désactivé';
+          }
+        } else {
+          this.error = 'Erreur Système'
+        }
+
         try {
-          this.loading.dismiss();
+          loading.dismiss();
         } catch (e) {
 
         }
