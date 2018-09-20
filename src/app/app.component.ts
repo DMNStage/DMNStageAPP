@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {AlertController, LoadingController, MenuController, Nav, Platform} from 'ionic-angular';
+import {AlertController, Events, LoadingController, MenuController, Nav, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 
@@ -10,6 +10,8 @@ import {ListPage} from "../pages/list/list";
 import {AuthProvider} from "../providers/auth/auth";
 import {LoginPage} from "../pages/login/login";
 import {ProductProvider} from "../providers/product/product";
+import {ImageLoaderConfig} from "ionic-image-loader";
+import {File} from '@ionic-native/file';
 
 @Component({
   templateUrl: 'app.html'
@@ -33,28 +35,14 @@ export class MyApp {
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
               private authProvider: AuthProvider, public menuCtrl: MenuController, private loadingCtrl: LoadingController,
-              private productProvider: ProductProvider, public alertCtrl: AlertController) {
+              private productProvider: ProductProvider, public alertCtrl: AlertController,
+              private imageLoaderConfig: ImageLoaderConfig, private file: File, public events: Events) {
     this.initializeApp();
 
     this.pages = [
-      {title: 'Home', id: -2},
-      {title: 'List', id: -1}
+      {title: 'Home', id: -2}
     ];
 
-
-    /*this.products.push(new Product(1,'aaaa',''));
-    this.products.push(new Product(2,'bbbb',''));
-    this.products.push(new Product(3,'cccc',''));*/
-
-
-    /* this.products.forEach(product => {
-       this.pages.push({title:product.name, id: product.id});
-     });*/
-    // used for an example of ngFor and navigation
-    /*this.pages = [
-      { title: 'Home', productid: 0 },
-      { title: 'List', productid: 0 }
-    ];*/
 
   }
 
@@ -69,10 +57,73 @@ export class MyApp {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+
+      this.events.subscribe('loggedIn', (tokenData) => {
+        this.pages = [
+          {title: 'Home', id: -2}
+        ];
+        this.productProvider.getProductsByClient(tokenData.username).toPromise().then((productData: Array<Product>) => {
+          console.log(productData);
+          this.productProvider.products = productData;
+          productData.forEach(product => {
+            this.pages.push({title: product.name, id: product.id});
+          });
+          this.isInitialized = true;
+
+        }, () => {
+
+          const alert = this.alertCtrl.create({
+            title: 'Erreur!',
+            subTitle: 'Erreur lors de la récupération de vos produits!',
+            buttons: [{
+              text: 'Réessayer',
+              handler: () => {
+                this.myInit();
+              }
+            }]
+          });
+          alert.present();
+
+        });
+      });
+
       this.statusBar.styleDefault();
       if (this.platform.is('android')) {
         this.statusBar.styleBlackOpaque();
       }
+
+      console.log(this.file.dataDirectory);
+      this.file.checkDir(this.file.dataDirectory, 'mydir').then(_ => console.log('Directory exists'))
+        .catch(err => console.log('Directory doesn\'t exist'));
+
+      // image loader config
+      this.imageLoaderConfig.enableSpinner(true);
+      // set the maximum concurrent connections to 10
+      //this.imageLoaderConfig.setConcurrency(10);
+      // this.imageLoaderConfig.enableDebugMode();
+      this.imageLoaderConfig.useImageTag(true);
+      this.imageLoaderConfig.setFallbackUrl('assets/imgs/fallbackimg.jpg');
+      this.imageLoaderConfig.setMaximumCacheAge(7 * 24 * 60 * 60 * 1000);
+      this.imageLoaderConfig.setImageReturnType('base64');
+
+      this.myInit().then(() => {
+        this.rootPage = HomePage;
+        this.splashScreen.hide();
+      }, () => {
+        console.log('Going to login page');
+        this.rootPage = LoginPage;
+        this.splashScreen.hide();
+      })
+
+
+      /*this.splashScreen.hide();*/
+    });
+  }
+
+
+  myInit(): Promise<Boolean> {
+
+    return new Promise((resolve, reject) => {
 
       this.authProvider.getTokenDataFromLocalStorage().then((tokenData) => {
         console.log(tokenData);
@@ -85,6 +136,7 @@ export class MyApp {
               this.pages.push({title: product.name, id: product.id});
             });
             this.isInitialized = true;
+            resolve();
 
           }, () => {
 
@@ -94,7 +146,7 @@ export class MyApp {
               buttons: [{
                 text: 'Réessayer',
                 handler: () => {
-                  this.initializeApp();
+                  this.myInit();
                 }
               }]
             });
@@ -102,8 +154,9 @@ export class MyApp {
 
           });
 
-          this.rootPage = HomePage;
-          this.splashScreen.hide();
+          /*this.rootPage = HomePage;
+          this.splashScreen.hide();*/
+          resolve();
 
         }, () => {
           console.log('Token Invalid');
@@ -117,6 +170,7 @@ export class MyApp {
                 this.pages.push({title: product.name, id: product.id});
               });
               this.isInitialized = true;
+              resolve();
 
             }, () => {
 
@@ -126,7 +180,7 @@ export class MyApp {
                 buttons: [{
                   text: 'Réessayer',
                   handler: () => {
-                    this.initializeApp();
+                    this.myInit();
                   }
                 }]
               });
@@ -134,28 +188,32 @@ export class MyApp {
 
             });
 
-            this.rootPage = HomePage;
-            this.splashScreen.hide();
+            /*this.rootPage = HomePage;
+              this.splashScreen.hide();*/
+            resolve();
 
           }, (err) => {
             console.log(err);
             console.log("Can\' get new token from refresh token");
-            this.rootPage = LoginPage;
-            this.splashScreen.hide();
+            /*this.rootPage = LoginPage;
+            this.splashScreen.hide();*/
+            reject();
           })
 
 
         })
 
       }, (err) => {
-        console.log('Going to login page');
+        /*console.log('Going to login page');
         this.rootPage = LoginPage;
-        this.splashScreen.hide();
+        this.splashScreen.hide();*/
+        reject()
       });
 
 
-      /*this.splashScreen.hide();*/
     });
+
+
   }
 
 
@@ -175,6 +233,7 @@ export class MyApp {
 
   logout() {
     this.loading.present();
+    this.pages = [];
     this.authProvider.logout();
     setTimeout(() => {
       this.menuCtrl.close();

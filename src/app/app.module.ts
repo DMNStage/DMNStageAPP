@@ -16,6 +16,7 @@ import {LoginPage} from "../pages/login/login";
 import {ProductProvider} from '../providers/product/product';
 import {SubproductProvider} from '../providers/subproduct/subproduct';
 import {SubproductPage} from "../pages/subproduct/subproduct";
+import {IonicImageLoader} from "ionic-image-loader";
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {SubproductPage} from "../pages/subproduct/subproduct";
     BrowserModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    IonicImageLoader.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -52,7 +54,7 @@ import {SubproductPage} from "../pages/subproduct/subproduct";
     SubproductProvider,
 
 
-
   ]
 })
-export class AppModule {}
+export class AppModule {
+}

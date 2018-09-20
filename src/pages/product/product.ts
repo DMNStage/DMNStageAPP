@@ -22,7 +22,7 @@ export class ProductPage {
   subProducts: Array<Subproduct> = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private productProvider: ProductProvider) {
-    this.selectedProduct = this.productProvider.products[navParams.get('productid') - 1];
+    this.selectedProduct = this.productProvider.getProductById(navParams.get('productid'));
     this.initializeSubProducts();
     console.log(this.selectedProduct)
   }
@@ -33,6 +33,7 @@ export class ProductPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ProductPage');
+
   }
 
 

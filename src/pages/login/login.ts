@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {App, IonicPage, LoadingController, MenuController, NavController, NavParams} from 'ionic-angular';
+import {App, Events, IonicPage, LoadingController, MenuController, NavController, NavParams} from 'ionic-angular';
 import {AuthProvider} from "../../providers/auth/auth";
 import {HomePage} from "../home/home";
 import {ProductProvider} from "../../providers/product/product";
@@ -26,7 +26,7 @@ export class LoginPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private authProvider: AuthProvider,
               private app: App, private menu: MenuController, private loadingCtrl: LoadingController,
-              private productProvider: ProductProvider) {
+              private productProvider: ProductProvider, public events: Events) {
   }
 
   ionViewDidLoad() {
@@ -41,13 +41,14 @@ export class LoginPage {
     this.menu.swipeEnable(true);
   }
 
-  login() {
+  onLogin(username, password) {
     this.loading.present();
-    this.authProvider.authenticateUser('client1', '654321').subscribe(data => {
-        this.loginResult = data;
-        this.authProvider.storeTokenData(data);
+    this.authProvider.authenticateUser(username, password).subscribe(tokenData => {
+        this.loginResult = tokenData;
+        this.authProvider.storeTokenData(tokenData);
 
-        /*this.productProvider.getProductsByClient(data.username).toPromise().then((productData: Array<Product>) => {
+        this.events.publish('loggedIn', tokenData);
+        /*this.productProvider.getProductsByClient(tokenData.username).toPromise().then((productData: Array<Product>) => {
           console.log(productData);
           this.productProvider.products = productData;
           productData.forEach(product => {

@@ -21,4 +21,8 @@ export class ProductProvider {
   getProductsByClient(username: String) {
     return this.http.get(this.authProvider.host + '/productsbyclient/' + username + '?access_token=' + this.authProvider.tokenData.access_token);
   }
+
+  getProductById(productId: number) {
+    return this.products.find(x => x.id == productId);
+  }
 }

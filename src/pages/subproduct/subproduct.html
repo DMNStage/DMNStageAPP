@@ -13,69 +13,92 @@
 </ion-header>
 
 
-<ion-content padding [style.background-color]="bColor">
-  <ion-item *ngIf="!fullscreen">
-    <ion-label>Date</ion-label>
-    <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="myDate" (ionChange)="onDateChange()"></ion-datetime>
-  </ion-item>
+<ion-content padding class="ioncontent" [style.background-color]="bColor">
 
-  <!-- <ion-item *ngIf="isTimeValuesFilled">
-     <ion-label>Heure</ion-label>
-     <ion-datetime displayFormat="HH:mm" [(ngModel)]="myTime"
-                    min="2018-09-18T06:00:00+00:00" max="2018-09-18T17:59:00+00:00" (ionChange)="onTimeChange(myTime)"></ion-datetime>
-   </ion-item>
+  <ion-card *ngIf="!fullscreen">
+    <ion-card-content>
+      <ion-item *ngIf="!fullscreen">
+        <ion-label>Date</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="myDate" (ionChange)="onDateChange()"></ion-datetime>
+      </ion-item>
 
-   <ion-item>
-     <ion-range min="{{startTime}}" max="{{endTime}}" step="15" pin="true" [(ngModel)]="saturation" color="primary">
-       <ion-label range-left>-200</ion-label>
-       <ion-label range-right>200</ion-label>
-     </ion-range>
-   </ion-item>-->
-  <ion-item *ngIf="isTimeValuesFilled && !fullscreen">
-    <ion-label>Heure</ion-label>
-    <ion-select [(ngModel)]="myTime" interface="popover" (ionChange)="onTimeChange(myTime)">
-      <ion-option *ngFor="let imgTime of imgsTimes" value="{{imgTime}}">{{imgTime}}</ion-option>
-    </ion-select>
-  </ion-item>
 
-  <ion-slides zoom>
-    <ion-slide style="/*display: flow-root !important;*/">
-      <div class="swiper-zoom-container" style="margin-top: 0;">
+      <!-- <ion-item *ngIf="isTimeValuesFilled">
+         <ion-label>Heure</ion-label>
+         <ion-datetime displayFormat="HH:mm" [(ngModel)]="myTime"
+                        min="2018-09-18T06:00:00+00:00" max="2018-09-18T17:59:00+00:00" (ionChange)="onTimeChange(myTime)"></ion-datetime>
+       </ion-item>
 
-        <img src="http://img.dmnstage.com/teledetection/satellitestandard/canalir/20180731/0030.jpg">
-      </div>
-      <!--<img src="http://img.dmnstage.com/teledetection/satellitestandard/canalir/20180731/0030.jpg">-->
-    </ion-slide>
-    <ion-slide style="/*display: flow-root !important;*/">
-      <div class="swiper-zoom-container" style="margin-top: 0;">
+       <ion-item>
+         <ion-range min="{{startTime}}" max="{{endTime}}" step="15" pin="true" [(ngModel)]="saturation" color="primary">
+           <ion-label range-left>-200</ion-label>
+           <ion-label range-right>200</ion-label>
+         </ion-range>
+       </ion-item>-->
 
-        <img src="http://img.dmnstage.com/teledetection/satellitestandard/canalir/20180731/0030.jpg">
-      </div>
-      <!--<img src="http://img.dmnstage.com/teledetection/satellitestandard/canalir/20180731/0030.jpg">-->
-    </ion-slide>
-  </ion-slides>
+      <ion-item *ngIf="isTimeValuesFilled && !fullscreen">
+        <ion-label>Heure</ion-label>
+        <ion-select [(ngModel)]="myTime" interface="popover" (ionChange)="onTimeChange()">
+          <ion-option *ngFor="let imgTime of imgsTimes" value="{{imgTime}}">{{imgTime}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="!fullscreen && imgs">
+    <ion-card-content style="padding: 0;">
+      <ion-slides (ionSlideDidChange)="onSlideChange()" *ngIf="!fullscreen" zoom class="myNormalion-slides"
+                  [initialSlide]="imgsTimes.indexOf(myTime)">
+        <ion-slide *ngFor="let img of imgs" style="display: flow-root !important;padding-top: 25px;">
+          <div class="swiper-zoom-container">
+            <!--<img src="{{img}}">-->
+            <img-loader src="{{img}}" useImg></img-loader>
+          </div>
+        </ion-slide>
+      </ion-slides>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="!imgs">
+    <ion-card-content style="padding: 0;">
+
+      <img src="assets/imgs/fallbackimg.jpg" useImg>
+
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-fab bottom right>
+    <button ion-fab round outline color="primary" (click)="toogleFullscreen()">
+      <ion-icon name="{{fullscreen?'contract':'expand'}}"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>
 
-<ion-slides zoom *ngIf="fullscreen">
-  <ion-slide style="/*display: flow-root !important;*/">
-    <div class="swiper-zoom-container" style="margin-top: 0;">
-
-      <img src="http://img.dmnstage.com/teledetection/satellitestandard/canalir/20180731/0030.jpg">
+<ion-slides (ionSlideDidChange)="onSlideChange()" *ngIf="fullscreen" zoom [initialSlide]="imgsTimes.indexOf(myTime)">
+  <ion-slide *ngFor="let img of imgs">
+    <div class="swiper-zoom-container">
+      <img-loader src="{{img}}" useImg></img-loader>
     </div>
-    <!--<img src="http://img.dmnstage.com/teledetection/satellitestandard/canalir/20180731/0030.jpg">-->
-  </ion-slide>
-  <ion-slide style="/*display: flow-root !important;*/">
-    <div class="swiper-zoom-container" style="margin-top: 0;">
-
-      <img src="http://img.dmnstage.com/teledetection/satellitestandard/canalir/20180731/0030.jpg">
-    </div>
-    <!--<img src="http://img.dmnstage.com/teledetection/satellitestandard/canalir/20180731/0030.jpg">-->
   </ion-slide>
 </ion-slides>
+
 <ion-footer>
   <ion-toolbar position="bottom" class="fullscreenbtn" color="{{fullscreen?'dark':'light'}}">
-    <button ion-button round outline color="primary" (click)="toogleFullscreen()">
-      <ion-icon name="log-out"></ion-icon>&nbsp;{{(fullscreen)?"Réduire":"Agrandir"}}
+    <button ion-button round icon-start (click)="onPreviousBtn()">
+      <ion-icon name="skip-backward"></ion-icon>
+      Pré
     </button>
+    <button ion-button round icon-start (click)="onPlayBtn()">
+      <ion-icon name="{{(slides?._autoplaying)?'pause':'play'}}"></ion-icon>
+      {{(slides?._autoplaying)?'Pause':'Play'}}
+    </button>
+    <button ion-button round icon-end (click)="onNextBtn()">
+      Suiv
+      <ion-icon name="skip-forward"></ion-icon>
+    </button>
+    <!--<button ion-button outline color="primary" (click)="next()">
+      <ion-icon name="expand"></ion-icon>&nbsp;next
+    </button>-->
   </ion-toolbar>
 </ion-footer>

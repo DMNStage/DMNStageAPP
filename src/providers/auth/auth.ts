@@ -18,7 +18,7 @@ export class AuthProvider {
   // readonly host = 'http://localhost:8088';
   public tokenData: Token;
   private readonly tokenLocalStorageDataKey = 'TokenData';
-  private readonly clientId = 'QWRtaW5BcHA=';
+  private readonly clientId = 'Q2xpZW50QXBw';
   private readonly secret = 'c2VjcmV0';
   private nav: NavController;
 
