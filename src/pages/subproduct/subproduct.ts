@@ -1,17 +1,9 @@
 import {Component, ViewChild} from '@angular/core';
-import {AlertController, Content, IonicPage, LoadingController, NavController, NavParams, Slides} from 'ionic-angular';
+import {AlertController, Content, IonicPage, LoadingController, NavParams, Slides} from 'ionic-angular';
 import {Subproduct} from "../../model/subproduct.model";
 import {SubproductProvider} from "../../providers/subproduct/subproduct";
 import * as datefns from 'date-fns';
 import {ImgLoader} from 'ionic-image-loader';
-
-
-/**
- * Generated class for the SubproductPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -28,11 +20,12 @@ export class SubproductPage {
   bColor: any;
   imgs: any[];
   allImgs: any[] = [];
+  areImgsReady: boolean = false;
   @ViewChild(Content) content: Content;
   @ViewChild(Slides) slides: Slides;
   private selectedSubProduct: Subproduct;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private subProductProvider: SubproductProvider,
+  constructor(public navParams: NavParams, private subProductProvider: SubproductProvider,
               private loadingCtrl: LoadingController, public alertCtrl: AlertController) {
     this.selectedSubProduct = navParams.get('subProduct');
 
@@ -52,7 +45,6 @@ export class SubproductPage {
     });
     loading.present();
 
-    console.log(this.myDate);
     if (datefns.isValid(this.myDate)) {
       let date = new Date(this.myDate);
       let year = date.getFullYear();
@@ -60,13 +52,28 @@ export class SubproductPage {
       let day = date.getDate();
 
       this.subProductProvider.getImages(this.selectedSubProduct.id, year, month, day).toPromise().then((data: { img: any[] }) => {
-        console.log(data);
         this.allImgs = data.img.slice(0, this.imgsTimes.length);
         this.imgs = this.allImgs.slice(0, 10);
         this.myTime = this.imgsTimes[0];
+        this.areImgsReady = (this.imgs.length > 0);
+
 
         loading.dismiss();
       }, (err) => {
+        console.log("Error while getting images:", err);
+        const alert = this.alertCtrl.create({
+          title: 'Erreur!',
+          subTitle: 'Erreur lors de la récupération des images!',
+          buttons: [{
+            text: 'OK',
+            handler: () => {
+
+            }
+          }]
+        });
+        alert.present();
+        loading.dismiss();
+      }).catch((err) => {
         console.log("Error while getting images:", err);
         const alert = this.alertCtrl.create({
           title: 'Erreur!',
@@ -100,7 +107,6 @@ export class SubproductPage {
 
       startTime = datefns.addMinutes(startTime, step);
     }
-    console.log(this.imgsTimes);
     this.myTime = this.imgsTimes[0];
 
     setTimeout(() => {
@@ -111,7 +117,8 @@ export class SubproductPage {
   onDateChange() {
     this.getImagesTimes();
     this.getImages();
-    this.slides.update();
+    if (this.slides != null)
+      this.slides.update();
   }
 
   onTimeChange() {
@@ -129,8 +136,7 @@ export class SubproductPage {
         setTimeout(() => {
           this.slides.slideTo(ind);
           loading.dismiss();
-          console.log(ind * 50);
-        }, ind * 20);
+        }, ind * 40);
 
       }
       else {
@@ -159,7 +165,7 @@ export class SubproductPage {
       this.slides.stopAutoplay();
     else {
       this.slides.autoplay = 1000;
-      this.slides.speed = 500;
+      this.slides.speed = 300;
       this.slides.startAutoplay()
     }
   }

@@ -1,7 +1,5 @@
-import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
-import {AuthProvider} from "../../providers/auth/auth";
-import {Token} from "../../model/token.model";
+import {Component, ViewChild} from '@angular/core';
+import {MenuController, Slides} from 'ionic-angular';
 
 @Component({
   selector: 'page-home',
@@ -9,27 +7,33 @@ import {Token} from "../../model/token.model";
 })
 export class HomePage {
 
-  loginResult: any;
-  tokendata: Token;
+  @ViewChild('slider') slider: Slides;
 
-  constructor(public navCtrl: NavController, private authProvider: AuthProvider) {
+  slides = [
+    {
+      title: 'La D.M.N, Votre partenaire pour un développement durable',
+      imageUrl: 'assets/imgs/homeSlider/1.png'
+    },
+    {
+      title: 'Le Siège de la Direction de la Météorologie Nationale ',
+      imageUrl: 'assets/imgs/homeSlider/2.png'
+    },
+    {
+      title: 'Le Siège de la Direction de la Météorologie Nationale',
+      imageUrl: 'assets/imgs/homeSlider/3.png'
+    },
+    {
+      title: ' Le Siège de la Direction de la Météorologie Nationale',
+      imageUrl: 'assets/imgs/homeSlider/4.png'
+    }
+  ];
+
+  constructor(private menuCtrl: MenuController) {
 
   }
 
-  login() {
-    this.authProvider.authenticateUser('abdellahaski', '654321').subscribe(data => {
-        this.loginResult = data;
-        this.authProvider.storeTokenData(data);
-      },
-      err => this.loginResult = err);
-  }
 
-  getTokenFromStorage() {
-    this.authProvider.getTokenDataFromLocalStorage().then((data) => {
-      console.log(data);
-      console.log(this.authProvider.tokenData);
-    }, (err) => {
-      console.log('none');
-    });
+  openMenu() {
+    this.menuCtrl.open()
   }
 }

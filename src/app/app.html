@@ -17,6 +17,9 @@
   </ion-content>
   <ion-footer>
     <ion-toolbar position="bottom" class="logoutbtn">
+      <button ion-button round (click)="contactUsProvider.contact()">
+        <ion-icon name="mail"></ion-icon>&nbsp;Contactez nous
+      </button>
       <button ion-button round outline color="danger" (click)="logout()">
         <ion-icon name="log-out"></ion-icon>&nbsp;Se déconnecter
       </button>

@@ -3,7 +3,7 @@
     <name>DMNStageAPP</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-  <content original-src="index.html" src="http://192.168.43.243:8100"/>
+  <content src="index.html"/>
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -86,6 +86,8 @@
   <plugin name="cordova-plugin-file" spec="^6.0.1"/>
   <allow-navigation href="http://192.168.1.6:8101" sessionid="e478cb76"/>
   <allow-navigation href="http://192.168.1.6:8100" sessionid="e6daa22c"/>
-  <allow-navigation href="http://192.168.43.243:8100" sessionid="09dc899d"/>
+  <allow-navigation href="http://192.168.0.142:8101" sessionid="933dc492"/>
+  <allow-navigation href="http://192.168.0.142:8100" sessionid="f9226d00"/>
+  <allow-navigation href="http://192.168.1.4:8100" sessionid="49ea2bc3"/>
   <engine name="android" spec="7.0.0"/>
 </widget>

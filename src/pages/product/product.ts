@@ -5,13 +5,6 @@ import {ProductProvider} from "../../providers/product/product";
 import {Subproduct} from "../../model/subproduct.model";
 import {SubproductPage} from "../subproduct/subproduct";
 
-/**
- * Generated class for the ProductPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-product',
@@ -24,7 +17,6 @@ export class ProductPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, private productProvider: ProductProvider) {
     this.selectedProduct = this.productProvider.getProductById(navParams.get('productid'));
     this.initializeSubProducts();
-    console.log(this.selectedProduct)
   }
 
   initializeSubProducts() {
@@ -38,7 +30,6 @@ export class ProductPage {
 
 
   onSubproductSelected(subproduct: Subproduct) {
-    console.log(subproduct);
     this.navCtrl.push(
       SubproductPage,
       {

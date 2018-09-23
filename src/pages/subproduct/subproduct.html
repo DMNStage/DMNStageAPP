@@ -17,37 +17,25 @@
 
   <ion-card *ngIf="!fullscreen">
     <ion-card-content>
-      <ion-item *ngIf="!fullscreen">
+      <ion-item>
         <ion-label>Date</ion-label>
         <ion-datetime displayFormat="DD/MM/YYYY" [max]="myDate" [(ngModel)]="myDate"
                       (ionChange)="onDateChange()"></ion-datetime>
       </ion-item>
 
-      <!-- <ion-item *ngIf="isTimeValuesFilled">
-         <ion-label>Heure</ion-label>
-         <ion-datetime displayFormat="HH:mm" [(ngModel)]="myTime"
-                        min="2018-09-18T06:00:00+00:00" max="2018-09-18T17:59:00+00:00" (ionChange)="onTimeChange(myTime)"></ion-datetime>
-       </ion-item>
-
-       <ion-item>
-         <ion-range min="{{startTime}}" max="{{endTime}}" step="15" pin="true" [(ngModel)]="saturation" color="primary">
-           <ion-label range-left>-200</ion-label>
-           <ion-label range-right>200</ion-label>
-         </ion-range>
-       </ion-item>-->
-
-      <ion-item *ngIf="isTimeValuesFilled && !fullscreen">
+      <ion-item *ngIf="isTimeValuesFilled">
         <ion-label>Heure</ion-label>
-        <ion-select [(ngModel)]="myTime" interface="popover" (ionChange)="onTimeChange()">
+        <ion-select [(ngModel)]="myTime" interface="popover" (ionChange)="onTimeChange()" [disabled]="!areImgsReady">
           <ion-option *ngFor="let imgTime of imgsTimes" value="{{imgTime}}">{{imgTime}}</ion-option>
         </ion-select>
       </ion-item>
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="!fullscreen && imgs">
+  <ion-card *ngIf="!fullscreen && areImgsReady">
     <ion-card-content style="padding: 0;">
-      <ion-slides (ionSlideDidChange)="onSlideChange()" *ngIf="!fullscreen" zoom class="myNormalion-slides"
+      <ion-slides effect="fade" (ionSlideDidChange)="onSlideChange()" *ngIf="!fullscreen" zoom
+                  class="myNormalion-slides"
                   [initialSlide]="imgsTimes.indexOf(myTime)">
         <ion-slide *ngFor="let img of imgs" style="display: flow-root !important;padding-top: 25px;">
           <div class="swiper-zoom-container">
@@ -59,7 +47,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="!imgs">
+  <ion-card *ngIf="!areImgsReady">
     <ion-card-content style="padding: 0;">
 
       <img src="assets/imgs/fallbackimg.jpg" useImg>
@@ -75,7 +63,8 @@
   </ion-fab>
 </ion-content>
 
-<ion-slides (ionSlideDidChange)="onSlideChange()" *ngIf="fullscreen" zoom [initialSlide]="imgsTimes.indexOf(myTime)">
+<ion-slides effect="fade" (ionSlideDidChange)="onSlideChange()" *ngIf="fullscreen" zoom
+            [initialSlide]="imgsTimes.indexOf(myTime)">
   <ion-slide *ngFor="let img of imgs">
     <div class="swiper-zoom-container">
       <img-loader src="{{img}}" useImg></img-loader>
@@ -85,15 +74,15 @@
 
 <ion-footer>
   <ion-toolbar position="bottom" class="fullscreenbtn" color="{{fullscreen?'dark':'light'}}">
-    <button ion-button round icon-start (click)="onPreviousBtn()">
+    <button ion-button round icon-start (click)="onPreviousBtn()" [disabled]="!areImgsReady">
       <ion-icon name="skip-backward"></ion-icon>
       Pré
     </button>
-    <button ion-button round icon-start (click)="onPlayBtn()">
+    <button ion-button round icon-start (click)="onPlayBtn()" [disabled]="!areImgsReady">
       <ion-icon name="{{(slides?._autoplaying)?'pause':'play'}}"></ion-icon>
       {{(slides?._autoplaying)?'Pause':'Play'}}
     </button>
-    <button ion-button round icon-end (click)="onNextBtn()">
+    <button ion-button round icon-end (click)="onNextBtn()" [disabled]="!areImgsReady">
       Suiv
       <ion-icon name="skip-forward"></ion-icon>
     </button>

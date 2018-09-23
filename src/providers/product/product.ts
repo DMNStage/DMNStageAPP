@@ -3,12 +3,6 @@ import {Injectable} from '@angular/core';
 import {AuthProvider} from "../auth/auth";
 import {Product} from "../../model/product.model";
 
-/*
-  Generated class for the ProductProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class ProductProvider {
 
@@ -19,7 +13,7 @@ export class ProductProvider {
   }
 
   getProductsByClient(username: String) {
-    return this.http.get(this.authProvider.host + '/productsbyclient/' + username + '?access_token=' + this.authProvider.tokenData.access_token);
+    return this.http.get(this.authProvider.host + '/productsbyclient/' + username);
   }
 
   getProductById(productId: number) {

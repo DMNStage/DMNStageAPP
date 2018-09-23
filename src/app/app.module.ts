@@ -4,28 +4,27 @@ import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 
 import {MyApp} from './app.component';
 import {HomePage} from '../pages/home/home';
-import {ListPage} from '../pages/list/list';
 
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {ProductPage} from "../pages/product/product";
 import {AuthProvider} from '../providers/auth/auth';
 import {IonicStorageModule} from "@ionic/storage";
-import {HttpClientModule} from "@angular/common/http";
-import {LoginPage} from "../pages/login/login";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {ProductProvider} from '../providers/product/product';
 import {SubproductProvider} from '../providers/subproduct/subproduct';
 import {SubproductPage} from "../pages/subproduct/subproduct";
 import {IonicImageLoader} from "ionic-image-loader";
+import {EmailComposer} from "@ionic-native/email-composer";
+import {ContactUsProvider} from '../providers/contact-us/contact-us';
+import {AuthInterceptorProvider} from '../providers/auth-interceptor/auth-interceptor';
 
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    ListPage,
     ProductPage,
-    LoginPage,
     SubproductPage
   ],
   imports: [
@@ -39,9 +38,7 @@ import {IonicImageLoader} from "ionic-image-loader";
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage,
     ProductPage,
-    LoginPage,
     SubproductPage
   ],
   providers: [
@@ -52,6 +49,9 @@ import {IonicImageLoader} from "ionic-image-loader";
     ProductProvider,
     SubproductProvider,
     SubproductProvider,
+    EmailComposer,
+    ContactUsProvider,
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorProvider, multi: true},
 
 
   ]

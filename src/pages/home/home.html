@@ -3,17 +3,85 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Home</ion-title>
+    <ion-title>Maroc Météo</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h3>Page d'accueil</h3>
 
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
+  <ion-card>
+    <ion-card-header style="white-space: normal">
+      Bienvenue sur le Système d'Information Extranet de la Direction de la Météorologie Nationale
+    </ion-card-header>
+  </ion-card>
 
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+  <!--  <h5>Accueil</h5>
+  <h4>Bienvenue sur le Système d'Information Extranet de la Direction de la Météorologie Nationale</h4>
+    -->
+
+  <div class="container" no-padding style="width: 100%">
+    <ion-slides effect="flip" no-padding #slider pager loop autoplay="4000">
+      <ion-slide *ngFor="let slide of slides">
+
+        <ion-card>
+          <!--<div class="inner-container">-->
+          <img class="img" src="{{slide.imageUrl}}">
+          <ion-card-content>
+            <ion-card-title>
+              {{slide.title}}
+            </ion-card-title>
+          </ion-card-content>
+        </ion-card>
+        <!--</div>-->
+
+      </ion-slide>
+
+    </ion-slides>
+
+    <!-- Add Pagination -->
+    <div class="swiper-button-prev swiper-button-white backBtn"
+         (click)="slider.slidePrev()"></div>
+    <div class="swiper-button-next swiper-button-white nextBtn"
+         (click)="slider.slideNext()"></div>
+  </div>
+
+  <!-- <ion-slides #slider effect="fade" (ionSlideWillChange)="onSlideChanged()">
+     <ion-slide *ngFor="let slide of slides"
+                class="swiper-no-swiping"
+                [ngStyle]="{'background' : 'url(' + slide.imageUrl + ')'}">
+       <h2>{{slide.title}}</h2>
+     </ion-slide>
+     &lt;!&ndash; Add Pagination &ndash;&gt;
+     <div *ngIf="showPrev"
+          class="swiper-button-prev swiper-button-white"
+          (click)="previousSlide()"></div>
+     <div *ngIf="showNext"
+          class="swiper-button-next swiper-button-white"
+          (click)="nextSlide()"></div>
+   </ion-slides>-->
+
+  <ion-card>
+
+    <ion-card-header style="white-space: normal">
+      Pour plus d'informations sur nos produits
+    </ion-card-header>
+
+    <ion-card-content>
+      Contactez notre service commercial aux numéros suivants:<br>
+      Tél. (212) 5 22.65.49.00/65.48.00 <br>
+      Fax : (212) 5 22.91.37.97<br>
+      ou par courrier: contact@marocmeteo.ma <br>
+      ou visitez notre site web www.marocmeteo.ma
+    </ion-card-content>
+
+  </ion-card>
 
 </ion-content>
+<ion-footer>
+  <ion-toolbar position="bottom" style="text-align: center">
+    <button ion-button round outline icon-start (click)="openMenu()">
+      <ion-icon name="basket"></ion-icon>
+      Accéder à vos produits
+    </button>
+  </ion-toolbar>
+</ion-footer>
