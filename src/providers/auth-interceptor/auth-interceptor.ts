@@ -25,6 +25,7 @@ export class AuthInterceptorProvider implements HttpInterceptor {
       return next.handle(req.clone());
     }
     let is401TokenData;
+    let is400 = false;
     /*return next.handle(req.clone());*/
 
     /*let promise = this.authProvider.getTokenDataFromLocalStorage().then((data)=> {
@@ -47,28 +48,46 @@ export class AuthInterceptorProvider implements HttpInterceptor {
           console.log('interceptor said NO');
           console.log('got 401 from server');
           is401TokenData = tokenData;
-
+        } else if (err.status === 400) {
+          is400 = true;
         }
+
+
       });
     }), catchError(err => {
 
-      if (is401TokenData) {
+        if (is401TokenData || is400) {
         return this.authProvider.getNewTokenDataFromRefreshToken(is401TokenData.refresh_token).pipe(mergeMap((newTokenData) => {
           this.authProvider.storeTokenData(newTokenData);
           const clonedreq = req.clone({
             headers: req.headers.set('Authorization', 'Bearer ' + newTokenData.access_token)
           });
-          return next.handle(clonedreq);
-        }))
-      }
-      else {
-        console.log("error");
-        console.log(err);
-        this.events.publish('logout');
-        return of<HttpEvent<any>>()
-      }
+          return next.handle(clonedreq).do(succ => {
 
-    }));
+          }, err => {
+            console.log("000000000");
+            if (err.status === 400) {
+              console.log('got 400 from server while trying to get a new access token from refresh token');
+              this.events.publish('logout');
+              return of<HttpEvent<any>>();
+
+            }
+          });
+        }), catchError(err => {
+          console.log("000000000");
+          if (err.status === 400) {
+            console.log('got 400 from server while trying to get a new access token from refresh token');
+            this.events.publish('logout');
+            return of<HttpEvent<any>>();
+          }
+        }))
+        }
+        else {
+          return next.handle(req.clone())
+        }
+
+      }
+    ));
   }
 
 

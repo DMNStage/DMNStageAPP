@@ -40,7 +40,7 @@
         <ion-slide *ngFor="let img of imgs" style="display: flow-root !important;padding-top: 25px;">
           <div class="swiper-zoom-container">
             <!--<img src="{{img}}">-->
-            <img-loader src="{{img}}" useImg></img-loader>
+            <img-loader src="{{img}}" useImg fallbackUrl="assets/imgs/fallbackimg.jpg"></img-loader>
           </div>
         </ion-slide>
       </ion-slides>
@@ -67,7 +67,7 @@
             [initialSlide]="imgsTimes.indexOf(myTime)">
   <ion-slide *ngFor="let img of imgs">
     <div class="swiper-zoom-container">
-      <img-loader src="{{img}}" useImg></img-loader>
+      <img-loader src="{{img}}" useImg fallbackUrl="assets/imgs/fallbackimg.jpg"></img-loader>
     </div>
   </ion-slide>
 </ion-slides>

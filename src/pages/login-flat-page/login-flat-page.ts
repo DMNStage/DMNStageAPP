@@ -75,7 +75,7 @@ export class LoginFlatPage {
               private loadingCtrl: LoadingController, public myEvents: Events, private toastCtrl: ToastController,
               private contactUsProvider: ContactUsProvider, private menu: MenuController) {
     this.data = {
-      "logo": "assets/imgs/DMNlogo.jpg",
+      "logo": "assets/imgs/DMNlogo.png",
       "btnLogin": "Se Connecter",
       "txtUsername": "Nom d'utilisateur",
       "txtPassword": "Mot de passe",
