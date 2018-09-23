@@ -125,7 +125,6 @@ export class MyApp {
       });
 
     });
-
   }
 
   prepareSideMenu(username: string) {
