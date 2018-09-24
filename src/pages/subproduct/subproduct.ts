@@ -3,7 +3,6 @@ import {AlertController, Content, IonicPage, LoadingController, NavParams, Slide
 import {Subproduct} from "../../model/subproduct.model";
 import {SubproductProvider} from "../../providers/subproduct/subproduct";
 import * as datefns from 'date-fns';
-import {ImgLoader} from 'ionic-image-loader';
 
 @IonicPage()
 @Component({
@@ -13,6 +12,7 @@ import {ImgLoader} from 'ionic-image-loader';
 export class SubproductPage {
 
   myDate: any = datefns.format(new Date(), "YYYY-MM-dd");
+  nowDate = datefns.format(new Date(), "YYYY-MM-dd");
   myTime: any;
   imgsTimes: any[] = [];
   isTimeValuesFilled: boolean = false;
@@ -125,23 +125,30 @@ export class SubproductPage {
 
     let isAutoPlay = this.slides._autoplaying;
     let ind = this.imgsTimes.indexOf(this.myTime);
-    if (this.imgs.length < (ind + 6)) {
-      if (this.imgs.length < ind + 1) {
-        this.imgs = this.allImgs.slice(0, ind);
+    if (this.imgs.length < (ind + 6) && !this.slides.isEnd()) {
+      if (this.imgs.length < ind + 2) {
+
+        this.allImgs.slice(this.imgs.length, ind).forEach((img) => {
+          this.imgs.push(img);
+        });
+
         const loading = this.loadingCtrl.create({
           spinner: 'bubbles',
           content: 'Veuillez Patienter ...'
         });
         loading.present();
         setTimeout(() => {
-          this.slides.slideTo(ind);
+          this.slides.slideTo(ind + 1);
           loading.dismiss();
         }, ind * 40);
 
       }
       else {
-        this.imgs = this.allImgs.slice(0, this.imgs.length + 10);
-        this.slides.slideTo(ind);
+
+        this.allImgs.slice(this.imgs.length, this.imgs.length + 10).forEach((img) => {
+          this.imgs.push(img);
+        });
+        this.slides.slideTo(ind + 1);
       }
     }
     else
@@ -149,6 +156,9 @@ export class SubproductPage {
 
     if (isAutoPlay)
       this.slides.startAutoplay();
+
+    if (this.slides != null)
+      this.slides.update();
 
   }
 
@@ -160,27 +170,41 @@ export class SubproductPage {
   }
 
   onPlayBtn() {
-
+    this.slides.fade = {
+      crossFade: true
+    };
     if (this.slides._autoplaying)
       this.slides.stopAutoplay();
     else {
       this.slides.autoplay = 1000;
-      this.slides.speed = 300;
+      this.slides.speed = 1;
       this.slides.startAutoplay()
     }
   }
 
   onNextBtn() {
-    if (this.imgs.length < (this.slides.getActiveIndex() + 6))
-      this.imgs = this.allImgs.slice(0, this.imgs.length + 10);
+    if (this.imgs.length < (this.slides.getActiveIndex() + 6)) {
+      this.allImgs.slice(this.imgs.length, this.imgs.length + 10).forEach((img) => {
+        this.imgs.push(img);
+      });
+
+      if (this.slides != null)
+        this.slides.update();
+    }
+
 
     this.slides.slideNext();
     this.myTime = this.imgsTimes[this.slides.getActiveIndex()];
   }
 
   onSlideChange() {
-    if (this.imgs.length < (this.slides.getActiveIndex() + 6))
-      this.imgs = this.allImgs.slice(0, this.imgs.length + 10);
+    if (this.imgs.length < (this.slides.getActiveIndex() + 6)) {
+      this.allImgs.slice(this.imgs.length, this.imgs.length + 10).forEach((img) => {
+        this.imgs.push(img);
+      });
+      if (this.slides != null)
+        this.slides.update();
+    }
 
     this.myTime = this.imgsTimes[this.slides.getActiveIndex()];
   }

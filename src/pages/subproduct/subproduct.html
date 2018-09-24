@@ -1,9 +1,3 @@
-<!--
-  Generated template for the SubproductPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar [hidden]="fullscreen">
@@ -12,14 +6,13 @@
 
 </ion-header>
 
-
 <ion-content padding class="ioncontent" [style.background-color]="bColor">
 
   <ion-card *ngIf="!fullscreen">
     <ion-card-content>
       <ion-item>
         <ion-label>Date</ion-label>
-        <ion-datetime displayFormat="DD/MM/YYYY" [max]="myDate" [(ngModel)]="myDate"
+        <ion-datetime displayFormat="DD/MM/YYYY" [max]="nowDate" [(ngModel)]="myDate"
                       (ionChange)="onDateChange()"></ion-datetime>
       </ion-item>
 
@@ -34,7 +27,7 @@
 
   <ion-card *ngIf="!fullscreen && areImgsReady">
     <ion-card-content style="padding: 0;">
-      <ion-slides effect="fade" (ionSlideDidChange)="onSlideChange()" *ngIf="!fullscreen" zoom
+      <ion-slides speed="1" (ionSlideDidChange)="onSlideChange()" *ngIf="!fullscreen" zoom
                   class="myNormalion-slides"
                   [initialSlide]="imgsTimes.indexOf(myTime)">
         <ion-slide *ngFor="let img of imgs" style="display: flow-root !important;padding-top: 25px;">
@@ -63,7 +56,7 @@
   </ion-fab>
 </ion-content>
 
-<ion-slides effect="fade" (ionSlideDidChange)="onSlideChange()" *ngIf="fullscreen" zoom
+<ion-slides speed="1" (ionSlideDidChange)="onSlideChange()" *ngIf="fullscreen" zoom
             [initialSlide]="imgsTimes.indexOf(myTime)">
   <ion-slide *ngFor="let img of imgs">
     <div class="swiper-zoom-container">
