@@ -176,7 +176,7 @@ export class SubproductPage {
     if (this.slides._autoplaying)
       this.slides.stopAutoplay();
     else {
-      this.slides.autoplay = 1000;
+      this.slides.autoplay = 300;
       this.slides.speed = 1;
       this.slides.startAutoplay()
     }

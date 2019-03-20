@@ -48,6 +48,15 @@
     </ion-card-content>
   </ion-card>
 
+<ion-slides speed="1" (ionSlideDidChange)="onSlideChange()" *ngIf="fullscreen" zoom
+  [initialSlide]="imgsTimes.indexOf(myTime)">
+  <ion-slide *ngFor="let img of imgs">
+    <div class="swiper-zoom-container">
+      <img-loader src="{{img}}" useImg fallbackUrl="assets/imgs/fallbackimg.jpg"></img-loader>
+    </div>
+  </ion-slide>
+</ion-slides>
+
 
   <ion-fab bottom right>
     <button ion-fab round outline color="primary" (click)="toogleFullscreen()">
@@ -56,14 +65,7 @@
   </ion-fab>
 </ion-content>
 
-<ion-slides speed="1" (ionSlideDidChange)="onSlideChange()" *ngIf="fullscreen" zoom
-            [initialSlide]="imgsTimes.indexOf(myTime)">
-  <ion-slide *ngFor="let img of imgs">
-    <div class="swiper-zoom-container">
-      <img-loader src="{{img}}" useImg fallbackUrl="assets/imgs/fallbackimg.jpg"></img-loader>
-    </div>
-  </ion-slide>
-</ion-slides>
+
 
 <ion-footer>
   <ion-toolbar position="bottom" class="fullscreenbtn" color="{{fullscreen?'dark':'light'}}">

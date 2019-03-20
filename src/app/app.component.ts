@@ -9,7 +9,7 @@ import {Product} from "../model/product.model";
 import {AuthProvider} from "../providers/auth/auth";
 import {ProductProvider} from "../providers/product/product";
 import {ImageLoader, ImageLoaderConfig} from "ionic-image-loader";
-import {ContactUsProvider} from "../providers/contact-us/contact-us";
+import { ContactUsProvider } from '../providers/contact-us/contact-us';
 
 @Component({
   templateUrl: 'app.html'
@@ -25,7 +25,7 @@ export class MyApp {
               private authProvider: AuthProvider, public menuCtrl: MenuController, private loadingCtrl: LoadingController,
               private productProvider: ProductProvider, public alertCtrl: AlertController,
               private imageLoaderConfig: ImageLoaderConfig, public events: Events,
-              private imageLoader: ImageLoader, private contactUsProvider: ContactUsProvider) {
+    private imageLoader: ImageLoader, private contactUsProvider: ContactUsProvider) {
     this.initializeApp();
 
     this.pages = [
@@ -209,5 +209,10 @@ export class MyApp {
 
       }
     });
+  }
+
+  contact()
+  {
+    this.contactUsProvider.contact()
   }
 }
